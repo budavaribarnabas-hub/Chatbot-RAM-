@@ -1,0 +1,131 @@
+// ===== KÖZEPES MÉRETŰ RAM =====
+let RAM: number[] = []
+let RAM_SIZE = 32
+for (let i = 0; i < RAM_SIZE; i++) RAM.push(0)
+
+function write(addr: number, value: number): void {
+    if (addr >= 0 && addr < RAM_SIZE) RAM[addr] = value
+}
+
+function read(addr: number): number {
+    if (addr >= 0 && addr < RAM_SIZE) return RAM[addr]
+    return 0
+}
+
+function clearRAM(): void {
+    for (let i = 0; i < RAM_SIZE; i++) RAM[i] = 0
+}
+
+// ===== CHATBOT LOGIKA =====
+function answerQuestion(question: string) {
+    // Példa RAM használatra: számoljuk, hányszor kérdezik "te mi vagy"
+    if (question.includes("te mi vagy")) {
+        let count = read(0)   // RAM 0. cella = számláló
+        count += 1
+        write(0, count)
+        basic.showString("EN EGY MICROBIT ROBOT VAGYOK (" + count + ")")
+    } else if (question.includes("mennyi az ido")) {
+        hour = input.runningTime() / 3600000
+        basic.showString("NINCS ORAM DE FUTOK " + Math.round(hour) + " ORAJA")
+    } else if (question.includes("okos vagy")) {
+        basic.showString("AMENNYIRE A KIS AGYAM ENGEDI")
+    } else if (question.includes("Hogy vagy")) {
+        basic.showString("JOL KOSZONOM")
+    } else if (question.includes("Mi az a Chatbot")) {
+        basic.showString("Beszelgeto mesterseges intelligencia program")
+    } else if (question.includes("Mi az az ai")) {
+        basic.showString("Mestersegesen alkotott intelligencia")
+    } else if (question.includes("Mi az a chatgpt")) {
+        basic.showString("Beszelgeto mesterseges intelligencia")
+    } else if (question.includes("Mi az a pc")) {
+        basic.showString("Altalanos celu szamitogep")
+    } else if (question.includes("Mi az a ps")) {
+        basic.showString("Sony PlayStation konzol")
+    } else if (question.includes("Mi az a dinoszaurusz")) {
+        basic.showString("Hatalmas osi gyik")
+    } else if (question.includes("Mi az a magyarorszag")) {
+        basic.showString("Kozep-europai orszag allam")
+    } else if (question.includes("Orban viktor")) {
+        basic.showString("Magyar politikai vezeto")
+    } else if (question.includes("Hol van magyarorszag")) {
+        basic.showString("Kozep-europai orszag")
+    } else if (question.includes("Gyurcsany ferenc")) {
+        basic.showString("Magyar politikai vezeto")
+    } else if (question.includes("Dunantuli Kozephegyseg")) {
+        basic.showString("Magyarorszagi hegyseg rendszer")
+    } else if (question.includes("Magyarorszag merete")) {
+        basic.showString("Kozepes meretu terulet")
+    } else if (question.includes("Magyarorszag lakossaga")) {
+        basic.showString("9,6 millio")
+    } else if (question.includes("Mi az az ember")) {
+        basic.showString("Gondolkodo, beszelo eloleny")
+    } else if (question.includes("Mi az az okoszisztema")) {
+        basic.showString("Automatizalt, egymashoz kapcsolt rendszer")
+    } else if (question.includes("Mi az az evolucio")) {
+        basic.showString("Fajok fokozatos valtozasa")
+    } else if (question.includes("Mi az a bolygo")) {
+        basic.showString("Csillag korul keringo test")
+    } else if (question.includes("Mi az az ur")) {
+        basic.showString("Veletlen nelkuli terulet, csillagok")
+    } else if (question.includes("Mi az a micro:bit")) {
+        basic.showString("Kis programozhato elektronikus fejlesztolap")
+    } else if (question.includes("Mi az a kutya")) {
+        basic.showString("Huseges hazi allat")
+    } else if (question.includes("Mi a a fejlodes")) {
+        basic.showString("Folyamatos javulas es novekedes")
+    } else if (question.includes("II. Vilaghaboru kezdete")) {
+        basic.showString("1939. szeptember 1-jen")
+    } else if (question.includes("Legnagyobb ocean")) {
+        basic.showString("A Csendes-ocean")
+    } else if (question.includes("Mi az a HTML")) {
+        basic.showString("Weboldalak szerkezetenek jelolonyelve")
+    } else if (question.includes("Talalj ki egy viccet")) {
+        basic.showString("Miért nem tud a számítógép táncolni? – Mert fél a vírusoktól!")
+    } else if (question.includes("Mit tegyek, ha valaki online zaklat")) {
+        basic.showString("Blokkolhatod a személyt, jelentheted a platformnak, és beszélhetsz egy megbízható felnőttel.")
+    } else {
+        basic.showString("EZT NEM ERTEM")
+    }
+}
+
+// ===== GOMBOK, BETŰK, ÜZENET =====
+let currentIndex = 0
+let hour = 0
+let letters = "abcdefghijklmnopqrstuvwxyz ?"
+let message = ""
+
+// Következő betű
+input.onButtonPressed(Button.A, function () {
+    currentIndex += 1
+    if (currentIndex >= letters.length) currentIndex = 0
+    showCurrentLetter()
+})
+
+// Aktuális betű mutatása
+function showCurrentLetter() {
+    basic.showString(letters.charAt(currentIndex))
+}
+
+// Rázás = törlés
+input.onGesture(Gesture.Shake, function () {
+    message = ""
+    clearRAM() // RAM törlése rázásra
+    basic.showString("TOROLVE")
+})
+
+// Üzenet elküldése
+input.onButtonPressed(Button.AB, function () {
+    basic.showString("OK")
+    answerQuestion(message.toLowerCase())
+    message = ""
+})
+
+// Betű hozzáadása az üzenethez
+input.onButtonPressed(Button.B, function () {
+    message = "" + message + letters.charAt(currentIndex)
+    basic.showString(letters.charAt(currentIndex))
+})
+
+// Indulás
+basic.showString("CHATBOT")
+showCurrentLetter()
